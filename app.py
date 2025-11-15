@@ -14,15 +14,12 @@ st.set_page_config(
 )
 
 # --- CARREGAMENTO DO MODELO E ENCODERS ---
-# (Esta parte assume que você salvou o pipeline e o encoder da variável alvo)
 try:
-    # Carregue o pipeline completo (com o IMCCalculator)
     pipeline = joblib.load('modelo_svc.joblib')
-    # Carregue o encoder da variável alvo para decodificar a previsão
     target_encoder = joblib.load('target_encoder_obesidade.joblib')
     MODEL_LOADED = True
 except FileNotFoundError:
-    st.error("Arquivo do modelo ('modelo_svc.joblib') ou do encoder ('target_encoder_obesidade.joblib') Não encontrado.")
+    st.error("Arquivo do modelo ('modelo_svc.joblib') ou do encoder ('target_encoder_obesidade.joblib') não encontrado.")
     st.warning("Por favor, treine e salve seu modelo e encoder primeiro.")
     MODEL_LOADED = False
 except Exception as e:
@@ -31,11 +28,8 @@ except Exception as e:
 
 # --- INTERFACE DO USUÁRIO (Inputs) ---
 st.title('Calculadora de Nível de Obesidade 🩺')
-st.markdown("""
-    Preencha as informações abaixo para que o modelo de Machine Learning possa prever o nível de obesidade.
-""")
+st.markdown("Preencha as informações abaixo para que o modelo de Machine Learning possa prever o nível de obesidade.")
 
-# Usando colunas para organizar melhor os inputs
 col1, col2 = st.columns(2)
 
 with col1:
@@ -50,8 +44,7 @@ with col1:
         'Histórico familiar de excesso de peso?',
         ['Sim', 'Não'], horizontal=True
     )
-    fumo = st.radio('Você fuma?', ['Não', 'Sim'], horizontal=True)
-
+    fumo = st.radio('Você fuma?', ['Sim', 'Não'], horizontal=True)
 
 with col2:
     st.subheader("Alimentação e Atividade Física")
@@ -59,14 +52,14 @@ with col2:
         'Consumo frequente de alimentos calóricos (FAVC)?',
         ['Sim', 'Não'], horizontal=True
     )
-    freq_cons_veg = st.slider('Frequência de consumo de vegetais (FCVC)', 1, 3, 2, help="1: Nunca, 2: Às vezes, 3: Sempre")
-    num_refeicoes = st.slider('Número de refeições principais diárias', 1, 5, 3)
+    freq_cons_veg = st.slider('Frequência de consumo de vegetais (FCVC)', 1.0, 3.0, 2.0, step=1.0, help="1: Nunca, 2: Às vezes, 3: Sempre")
+    num_refeicoes = st.slider('Número de refeições principais diárias', 1.0, 5.0, 3.0, step=1.0)
     cons_lanches = st.select_slider(
         'Consumo de lanches entre refeições (CAEC)',
         options=['Não', 'As_vezes', 'Frequentemente', 'Sempre'],
         value='As_vezes'
     )
-    cons_agua = st.slider('Consumo diário de água (Litros)', 1.0, 4.0, 2.0, step=0.5)
+    cons_agua = st.slider('Consumo diário de água (Litros)', 1.0, 4.0, 2.0, step=1.0)
     cons_alcool = st.select_slider(
         'Consumo de bebida alcoólica (CALC)',
         options=['Não', 'As_vezes', 'Frequentemente', 'Sempre'],
@@ -74,23 +67,21 @@ with col2:
     )
 
 st.subheader("Rotina Diária")
-monitor_calorias = st.radio('Faz monitoramento de calorias ingeridas?', ['Não', 'Sim'], horizontal=True)
-freq_ativ_fisica = st.slider('Frequência de atividade física semanal (FAF)', 0, 7, 2, help="Dias por semana")
+monitor_calorias = st.radio('Faz monitoramento de calorias ingeridas?', ['Sim', 'Não'], horizontal=True)
+freq_ativ_fisica = st.slider('Frequência de atividade física semanal (FAF)', 0.0, 7.0, 2.0, step=1.0, help="Dias por semana")
 tempo_telas = st.slider('Tempo diário em dispositivos eletrônicos (TUE)', 0.0, 10.0, 2.0, step=0.5, help="Horas por dia")
 meio_transporte = st.selectbox(
     'Meio de transporte habitual (MTRANS)',
-    ['Transporte_Público', 'Automóvel', 'A_pé', 'Motocicleta', 'Bicicleta']
+    # CORRIGIDO: Valores exatamente como no dicionário
+    ['Transporte_publico', 'Carro', 'A_pe', 'Motocicleta', 'Bicicleta']
 )
-
 
 # --- BOTÃO DE PREVISÃO E LÓGICA ---
 if st.button('**Calcular Nível de Obesidade**', use_container_width=True, type="primary"):
     if not MODEL_LOADED:
-        st.error("O modelo Não está carregado. Não é possível fazer a previsão.")
+        st.error("O modelo não está carregado. Não é possível fazer a previsão.")
     else:
-        # Criar um DataFrame com os dados do usuário
-        # As chaves DEVEM ser os mesmos nomes de colunas usados no treino
-        # Note que 'IMC' Não está aqui, pois o pipeline irá calculá-lo
+        # CORRIGIDO: As colunas que são float no seu CSV precisam ser float aqui também.
         dados_usuario = pd.DataFrame({
             'Sexo_biologico': [sexo],
             'Idade': [idade],
@@ -102,30 +93,27 @@ if st.button('**Calcular Nível de Obesidade**', use_container_width=True, type=
             'Numero_refeicoes_principais': [float(num_refeicoes)],
             'Consumo_lanches_entre_refeicoes': [cons_lanches],
             'Habito_fumar': [fumo],
-            'Consumo_diario_agua': [cons_agua],
+            'Consumo_diario_agua': [float(cons_agua)],
             'Monitoramento_ingestao_calorica': [monitor_calorias],
             'Frequencia_atividade_fisica_semanal': [float(freq_ativ_fisica)],
-            'Tempo_diario_dispositivos_eletronicos': [tempo_telas],
+            'Tempo_diario_dispositivos_eletronicos': [float(tempo_telas)],
             'Consumo_bebida_alcoolica': [cons_alcool],
             'Meio_transporte_habitual': [meio_transporte]
         })
         
-        # st.write("Dados coletados para o modelo:")
-        # st.dataframe(dados_usuario)
+        st.subheader("Debug: Dados enviados para o modelo")
+        st.dataframe(dados_usuario)
+        st.write(dados_usuario.dtypes.astype(str))
 
-        # Fazer a predição
         try:
             predicao_codificada = pipeline.predict(dados_usuario)
-            
-            # Decodificar o resultado para o nome da classe
             resultado_legivel = target_encoder.inverse_transform(predicao_codificada)
             
             st.success(f'### O nível de obesidade previsto é: **{resultado_legivel[0]}**')
 
-            # Calcular e mostrar o IMC
             imc_calculado = peso / (altura ** 2)
             st.info(f"O IMC calculado para os dados inseridos é: **{imc_calculado:.2f}**")
 
         except Exception as e:
             st.error(f"Ocorreu um erro durante a predição: {e}")
-
+            st.error("Verifique a tabela de 'Debug' acima e compare com os dados de treino. Há alguma inconsistência nos nomes das categorias?")

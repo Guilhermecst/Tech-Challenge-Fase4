@@ -138,7 +138,7 @@ joblib.dump(target_encoder, 'target_encoder_obesidade.joblib')
 binary_features = ['Sexo_biologico', 'Historico_familiar_excesso_peso', 'Consumo_frequente_alimentos_caloricos', 'Habito_fumar', 'Monitoramento_ingestao_calorica']
 ordinal_features = ['Consumo_lanches_entre_refeicoes', 'Consumo_bebida_alcoolica']
 nominal_features = ['Meio_transporte_habitual']
-numerical_features = ['Idade', 'Altura', 'Peso', 'IMC', 'Frequencia_consumo_vegetais', 'Numero_refeicoes_principais', 'Consumo_diario_agua', 'Frequencia_atividade_fisica_semanal', 'Tempo_diario_dispositivos_eletronicos']
+numerical_features = ['Idade', 'Altura', 'Peso', 'Frequencia_consumo_vegetais', 'Numero_refeicoes_principais', 'Consumo_diario_agua', 'Frequencia_atividade_fisica_semanal', 'Tempo_diario_dispositivos_eletronicos']
 # %%
 ordinal_mappings = [
     ['Não', 'As_vezes', 'Frequentemente', 'Sempre'], # 'Consumo_lanches_entre_refeicoes'
@@ -147,19 +147,16 @@ ordinal_mappings = [
 # %%
 preprocessor = ColumnTransformer(
     transformers=[
-        # Para features binárias, OrdinalEncoder mapeará para 0 e 1
-        ('binary', OrdinalEncoder(), binary_features),
+        # Para features binárias (Sim/Não) e nominais (Masculino/Feminino), OneHotEncoder é o mais seguro
+        ('onehot', OneHotEncoder(handle_unknown='ignore', sparse_output=False), binary_features + nominal_features),
         
-        # Para features ordinais com ordem específica
+        # Para features ordinais com uma ordem clara
         ('ordinal', OrdinalEncoder(categories=ordinal_mappings), ordinal_features),
         
-        # Para features nominais, sem ordem intrínseca
-        ('nominal', OneHotEncoder(handle_unknown='ignore', sparse_output=False), nominal_features),
-        
-        # Para features numéricas
+        # Para todas as features numéricas
         ('numeric', StandardScaler(), numerical_features)
     ],
-    remainder='passthrough' # Mantém colunas não especificadas (se houver)
+    remainder='passthrough' # Mantém colunas não especificadas, se houver
 )
 # %%
 model_pipeline_knn = Pipeline(steps=[
