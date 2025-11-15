@@ -1,0 +1,6 @@
+[server]
+headless = true
+
+[runner]
+# Especifica a versão do Python que a Streamlit deve usar
+python = "3.9" 
