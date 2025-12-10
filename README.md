@@ -126,7 +126,7 @@ A aplicação está disponível publicamente via **Streamlit Cloud**, permitindo
 
 ## 👨‍💻 Autor  
 **Guilherme Costa**  
-🧩 Data Analyst/Scientist
+🧩 Data Analyst/Scientist  
 📧 [guilherme.cst@outlook.com.br]  
 🔗 [linkedin.com/in/seu-perfil](https://www.linkedin.com/in/silva-guilherme-costa/)
 

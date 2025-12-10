@@ -238,5 +238,5 @@ disp.plot(cmap=plt.cm.Blues)
 plt.xticks(rotation=45)
 plt.show()
 # %%
-joblib.dump(model_pipeline_svc, 'modelo_svc.joblib')
+joblib.dump(model_pipeline_knn, 'modelo_knn.joblib')
 # %%
