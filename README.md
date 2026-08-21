@@ -1,135 +1,133 @@
-# 🧮 Calculadora de Nível de Obesidade  
+# 🧮 Obesity Level Calculator
 
-## 🧠 Descrição do Projeto  
-O projeto **Calculadora de Nível de Obesidade** utiliza técnicas de **Machine Learning** para prever o nível de obesidade de um indivíduo com base em informações físicas e comportamentais, como idade, hábitos alimentares, histórico familiar e nível de atividade física.  
+## 🧠 Project Description
+The **Obesity Level Calculator** project uses **Machine Learning** techniques to predict a person's obesity level based on physical and behavioral information, such as age, eating habits, family history, and physical activity level.
 
-A solução foi disponibilizada em uma interface web interativa desenvolvida com **Streamlit**, permitindo que usuários insiram seus dados e recebam uma previsão automática.  
+The solution was deployed as an interactive web interface built with **Streamlit**, allowing users to enter their data and receive an automatic prediction.
 
-🔗 **Acesse a aplicação:** [calculadora-nivel-obesidade-tc-4-fiap.streamlit.app](https://calculadora-nivel-obesidade-tc-4-fiap.streamlit.app/)
-
----
-
-## 📊 Conjunto de Dados  
-O dataset utilizado é o **Obesidade.csv**, contendo atributos de perfil físico e hábitos de vida. Cada registro representa uma pessoa com seu respectivo nível de obesidade classificado.  
-
-### Principais variáveis:
-- `Idade`, `Altura`, `Peso`  
-- `Sexo_biologico`  
-- `Consumo_frequente_alimentos_caloricos`  
-- `Frequencia_atividade_fisica_semanal`  
-- `Consumo_diario_agua`  
-- `Numero_refeicoes_principais`  
-- `Tempo_diario_dispositivos_eletronicos`  
-- `Meio_transporte_habitual`  
-- `Nivel_obesidade` *(variável alvo)*  
+🔗 **Access the app:** [calculadora-nivel-obesidade-tc-4-fiap.streamlit.app](https://calculadora-nivel-obesidade-tc-4-fiap.streamlit.app/)
 
 ---
 
-## ⚙️ Estrutura do Pipeline de Machine Learning  
+## 📊 Dataset
+The dataset used is **Obesidade.csv**, containing physical profile and lifestyle attributes. Each record represents a person with their corresponding classified obesity level.
 
-O projeto implementa um **pipeline completo** de aprendizado de máquina utilizando classes personalizadas e componentes do Scikit-learn e Imbalanced-learn.  
-
-### Etapas do pipeline:
-1. **Cálculo do IMC (Índice de Massa Corporal)**  
-   Adiciona uma nova feature `IMC = Peso / Altura²` através da classe customizada `IMCCalculator`.
-
-2. **Pré-processamento de dados**  
-   Aplicado via `ColumnTransformer`:
-   - `OneHotEncoder` → variáveis binárias e nominais.  
-   - `OrdinalEncoder` → variáveis ordinais com ordem hierárquica.  
-   - `StandardScaler` → normalização de variáveis numéricas.
-
-3. **Balanceamento de classes**  
-   Utiliza **SMOTE (Synthetic Minority Oversampling Technique)** para lidar com desbalanceamento dos dados.
-
-4. **Treinamento e Avaliação**  
-   Modelos testados:
-   - `KNeighborsClassifier`  
-   - `RandomForestClassifier`  
-   - `SVC (Support Vector Machine)`  
-
-   O modelo **SVC** apresentou o melhor desempenho e foi selecionado para a aplicação final.
+### Main variables:
+- `Idade` (Age), `Altura` (Height), `Peso` (Weight)
+- `Sexo_biologico` (Biological sex)
+- `Consumo_frequente_alimentos_caloricos` (Frequent consumption of caloric food)
+- `Frequencia_atividade_fisica_semanal` (Weekly physical activity frequency)
+- `Consumo_diario_agua` (Daily water intake)
+- `Numero_refeicoes_principais` (Number of main meals)
+- `Tempo_diario_dispositivos_eletronicos` (Daily time on electronic devices)
+- `Meio_transporte_habitual` (Usual mode of transportation)
+- `Nivel_obesidade` (Obesity level) *(target variable)*
 
 ---
 
-## 🧩 Estrutura de Pastas e Arquivos  
+## ⚙️ Machine Learning Pipeline Structure
+
+The project implements a **complete pipeline** using custom classes and components from Scikit-learn and Imbalanced-learn.
+
+### Pipeline steps:
+1. **BMI Calculation**
+   Adds a new feature `BMI = Weight / Height²` through the custom `IMCCalculator` class.
+
+2. **Data preprocessing**
+   Applied via `ColumnTransformer`:
+   - `OneHotEncoder` → binary and nominal variables.
+   - `OrdinalEncoder` → ordinal variables with hierarchical order.
+   - `StandardScaler` → normalization of numeric variables.
+
+3. **Class balancing**
+   Uses **SMOTE (Synthetic Minority Oversampling Technique)** to handle data imbalance.
+
+4. **Training and Evaluation**
+   Models tested:
+   - `KNeighborsClassifier`
+   - `RandomForestClassifier`
+   - `SVC (Support Vector Machine)`
+
+   The **SVC** model showed the best performance and was selected for the final application.
+
+---
+
+## 🧩 Folder and File Structure
 
 ```
 📂 projeto_obesidade/
 │
 ├── data/
-│   └── Obesidade.csv                     # Base de dados
+│   └── Obesidade.csv                     # Dataset
 │
-├── modelo_svc.joblib                     # Modelo treinado
-├── target_encoder_obesidade.joblib       # Encoder da variável alvo
+├── modelo_svc.joblib                     # Trained model
+├── target_encoder_obesidade.joblib       # Target variable encoder
 │
-├── app.py                                # Aplicação Streamlit
-├── treino_modelos.py                     # Script de treino e avaliação
+├── app.py                                # Streamlit application
+├── treino_modelos.py                     # Training and evaluation script
 │
-├── requirements.txt                      # Dependências do projeto
-└── README.md                             # Documentação
+├── requirements.txt                      # Project dependencies
+└── README.md                             # Documentation
 ```
 
 ---
 
-## 🧰 Tecnologias Utilizadas  
-- **Python 3.10+**  
-- **Pandas** – Manipulação e análise de dados  
-- **Scikit-learn** – Pré-processamento e modelagem  
-- **Imbalanced-learn** – Balanceamento de classes (SMOTE)  
-- **Matplotlib** – Visualização dos resultados  
-- **Joblib** – Salvamento do modelo treinado  
-- **Streamlit** – Interface web interativa  
+## 🧰 Technologies Used
+- **Python 3.10+**
+- **Pandas** – Data manipulation and analysis
+- **Scikit-learn** – Preprocessing and modeling
+- **Imbalanced-learn** – Class balancing (SMOTE)
+- **Matplotlib** – Results visualization
+- **Joblib** – Trained model persistence
+- **Streamlit** – Interactive web interface
 
 ---
 
-## 📈 Como Executar o Projeto  
+## 📈 How to Run the Project
 
-### 1️⃣ Clonar o repositório  
+### 1️⃣ Clone the repository
 ```
 git clone https://github.com/<usuario>/calculadora-obesidade.git
 cd calculadora-obesidade
 ```
 
-### 2️⃣ Criar o ambiente virtual e instalar dependências  
+### 2️⃣ Create the virtual environment and install dependencies
 ```
 python -m venv venv
-source venv/bin/activate  # (no Windows: venv\Scripts\activate)
+source venv/bin/activate  # (on Windows: venv\Scripts\activate)
 pip install -r requirements.txt
 ```
 
-### 3️⃣ Executar o script de treinamento  
+### 3️⃣ Run the training script
 ```
 python treino_modelos.py
 ```
 
-### 4️⃣ Rodar a aplicação Streamlit  
+### 4️⃣ Run the Streamlit application
 ```
 streamlit run app.py
 ```
 
 ---
 
-## 🔍 Resultados e Avaliação  
+## 🔍 Results and Evaluation
 
-Os modelos foram avaliados com **métricas de classificação (precision, recall, F1-score)** e **matriz de confusão**.  
+The models were evaluated using **classification metrics (precision, recall, F1-score)** and a **confusion matrix**.
 
-O modelo **SVC** apresentou o melhor equilíbrio entre precisão e generalização, sendo salvo como `modelo_svc.joblib` e utilizado pela aplicação para previsões em tempo real.
-
----
-
-## 🚀 Implantação  
-
-A aplicação está disponível publicamente via **Streamlit Cloud**, permitindo interação direta do usuário com o modelo treinado.  
+The **SVC** model showed the best balance between precision and generalization, and was saved as `modelo_svc.joblib` for real-time predictions in the application.
 
 ---
 
-## 👨‍💻 Autor  
-**Guilherme Costa**  
-🧩 Data Analyst/Scientist  
-📧 [guilherme.cst@outlook.com.br]  
-🔗 [linkedin.com/in/seu-perfil](https://www.linkedin.com/in/silva-guilherme-costa/)
+## 🚀 Deployment
+
+The application is publicly available via **Streamlit Cloud**, allowing users to interact directly with the trained model.
 
 ---
 
-```
+## 👨‍💻 Author
+**Guilherme Costa**
+🧩 Data Analyst/Scientist
+📧 [guilherme.cst@outlook.com.br]
+🔗 [linkedin.com/in/silva-guilherme-costa](https://www.linkedin.com/in/silva-guilherme-costa/)
+
+---
